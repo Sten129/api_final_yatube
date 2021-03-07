@@ -20,7 +20,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    slug = serializers.SlugRelatedField(slug_field='slug')
+    #slug = serializers.SlugRelatedField(slug_field='slug', read_only=True)
 
     class Meta:
         fields = '__all__'

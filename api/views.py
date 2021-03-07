@@ -1,17 +1,18 @@
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from .permissions import IsAuthorOrReadOnly
 from .models import Post, Group, Comment, Follow
 from .serializers import PostSerializer, CommentSerializer, FollowSerializer, GroupSerializer
 
-PERMISSION_CLASSES = [IsAuthenticatedOrReadOnly]
+PERMISSION_CLASSES = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
 
 class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = PERMISSION_CLASSES
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer, *args, **kwargs):
         serializer.save(author=self.request.user)
 
     def get_queryset(self):
@@ -23,7 +24,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = PERMISSION_CLASSES
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer, *args, **kwargs):
         serializer.save(slug=self.request.slug)
 
     def get_queryset(self):
@@ -49,4 +50,8 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 class FollowViewSet(viewsets.ModelViewSet):
     serializer_class = FollowSerializer
+    permission_classes = PERMISSION_CLASSES
+
+    def perform_create(self, serializer, *args, **kwargs):
+        serializer.save(user=self.request.user, author=Post.author)
     pass
