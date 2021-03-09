@@ -7,16 +7,6 @@ User = get_user_model()
 class Group(models.Model):
     title = models.CharField('Заголовок', max_length=200,
                              help_text='Введите название сообщества')
-    description = models.TextField(
-        'Описание',
-        max_length=200,
-        null=True,
-        help_text='Описание')
-    slug = models.SlugField(
-        'Адрес для страницы',
-        null=False,
-        unique=True,
-        help_text='URL')
 
     def __str__(self):
         return self.title

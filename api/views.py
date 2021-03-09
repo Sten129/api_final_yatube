@@ -12,7 +12,7 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = PERMISSION_CLASSES
 
-    def perform_create(self, serializer, *args, **kwargs):
+    def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
     def get_queryset(self):
@@ -24,8 +24,8 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = PERMISSION_CLASSES
 
-    def perform_create(self, serializer, *args, **kwargs):
-        serializer.save(slug=self.request.slug)
+    def perform_create(self, serializer):
+        serializer.save()
 
     def get_queryset(self):
         groups = Group.objects.all()
