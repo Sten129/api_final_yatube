@@ -28,9 +28,9 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    user = serializers.SlugRelatedField(slug_field='username', read_only=True, default=serializers.CurrentUserDefault())
     following = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
     #author = serializers.ReadOnlyField(source='author.username')
     class Meta:
-        fields = ('user', 'following')
+        fields = ( 'user', 'following')
         model = Follow
