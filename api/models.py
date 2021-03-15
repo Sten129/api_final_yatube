@@ -1,5 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import Q, F
+from django.http import response
+from rest_framework import status
+from rest_framework.response import Response
 
 User = get_user_model()
 
@@ -46,20 +50,16 @@ class Comment(models.Model):
 class Follow(models.Model):
     user = models.ForeignKey(
         User,
-        verbose_name='Follower',
-        help_text='Подписчик',
         on_delete=models.CASCADE,
         related_name='follower')
     following = models.ForeignKey(
         User,
-        verbose_name='author',
-        help_text='Автор',
         on_delete=models.CASCADE,
         related_name='following'
     )
 
-    #class Meta:
-     #   constraints = [
-       #     models.UniqueConstraint(fields=['user', 'following'], name='unique_follow'),
-      #  ]
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'following'], condition=Q(user=F('following')), name = 'unique_follow')
+        ]
 
