@@ -16,6 +16,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('created',)
     empty_value_display = '-пусто-'
 
+
 class FollowAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'following')
     search_fields = ('user', 'following')
@@ -28,6 +29,3 @@ class FollowAdmin(admin.ModelAdmin):
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Follow, FollowAdmin)
-
-
-
