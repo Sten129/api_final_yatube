@@ -14,34 +14,27 @@ from .serializers import (
     FollowSerializer,
     GroupSerializer)
 
-
 PERMISSION_CLASSES = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
 
 class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = PERMISSION_CLASSES
+    queryset = Post.objects.all()
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['group']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    def get_queryset(self):
-        posts = Post.objects.all()
-        return posts
-
 
 class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = PERMISSION_CLASSES
+    queryset = Group.objects.all()
 
     def perform_create(self, serializer):
         serializer.save()
-
-    def get_queryset(self):
-        groups = Group.objects.all()
-        return groups
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -55,8 +48,9 @@ class CommentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         post_id = self.kwargs.get('post_id')
         post = get_object_or_404(Post, pk=post_id)
-        comments = post.comments.all()
-        return comments
+        return post.comments.all()
+        # comments = post.comments.all()
+        # return comments
 
 
 class FollowViewSet(viewsets.ModelViewSet):
@@ -72,5 +66,4 @@ class FollowViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        queryset = user.following.all()
-        return queryset
+        return user.following.all()
